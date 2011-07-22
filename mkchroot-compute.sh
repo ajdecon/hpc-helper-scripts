@@ -10,7 +10,7 @@
 
 
 VNFSDIR=$1
-PACKAGEDIR=$2
+#PACKAGEDIR=$2
 
 if [ -z "$VNFSDIR" ]; then
     echo "USAGE: $0 /path/to/chroot /path/to/packages"
@@ -44,16 +44,42 @@ echo "Installing additional packages"
 yum --installroot $VNFSDIR -y install \
     OpenIPMI ipmitool mdadm perl python cronie readline iptables
 
-echo "Installing Torque from $PACKAGEDIR/torque"
+#echo "Installing Torque from $PACKAGEDIR/torque"
+#yum --installroot $VNFSDIR --nogpgcheck -y install \
+#	$PACKAGEDIR/torque/torque-*rpm
+
+# Install Torque: assumes you've set up a local repo with the RPMS.
+echo "Installing Torque from local repository"
 yum --installroot $VNFSDIR --nogpgcheck -y install \
-	$PACKAGEDIR/torque/torque-*rpm
+	torque torque-client torque-mom torque-debuginfo
+
 /usr/sbin/chroot $VNFSDIR chkconfig pbs_server off
 /usr/sbin/chroot $VNFSDIR chkconfig pbs_sched off
 /usr/sbin/chroot $VNFSDIR chkconfig pbs_mom on
 
 
-echo "Installing OFED from $PACKAGEDIR/OFED"
-yum --installroot $VNFSDIR --nogpgcheck -y install $PACKAGEDIR/OFED/*rpm
+#echo "Installing OFED from $PACKAGEDIR/OFED"
+#yum --installroot $VNFSDIR --nogpgcheck -y install $PACKAGEDIR/OFED/*rpm
+
+# Install OFED packages: assumes you've set up a local repo.
+echo "Installing OFED from local repository"
+yum --installroot $VNFSDIR --nogpgcheck -y install dapl dapl-debuginfo \
+	dapl-devel dapl-devel-static dapl-utils ibutils ibutils-debuginfo \
+	infiniband-diags infiniband-diags-debuginfo kernel-ib \
+	kernel-ib-devel libcxgb3 libcxgb3-debuginfo libcxgb3-devel \
+	libibmad libibmad-debuginfo libibmad-devel libibmad-static \
+	libibumad libibumad-debuginfo libibumad-devel libibumad-static \
+	libibverbs libibverbs-debuginfo libibverbs-devel \
+	libibverbs-devel-static libibverbs-utils libipathverbs \
+	libipathverbs-debuginfo libipathverbs-devel libmlx4 \
+	libmlx4-debuginfo libmthca libmthca-debuginfo \
+	libmthca-devel-static libnes libnes-debuginfo libnes-devel-static \
+	librdmacm librdmacm-debuginfo librdmacm-devel librdmacm-utils \
+	mpi-selector mpitests_mvapich2_gcc mpitests_mvapich_gcc \
+	mpitests_openmpi_gcc mstflint mstflint-debuginfo mvapich2_gcc \
+	mvapich_gcc ofed-docs ofed-scripts openmpi_gcc opensm \
+	opensm-debuginfo opensm-devel opensm-libs opensm-static perftest \
+	perftest-debuginfo qperf qperf-debuginfo 
 
 echo
 echo "Creating default fstab"
