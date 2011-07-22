@@ -44,12 +44,12 @@ echo "Installing additional packages"
 yum --installroot $VNFSDIR -y install \
     OpenIPMI ipmitool mdadm perl python cronie readline iptables
 
-echo "Installing Torque Mom from $PACKAGEDIR/torque"
-cp $PACKAGEDIR/torque/torque-package-mom-linux-x86_64.sh $VNFSDIR/tmp/
-/usr/sbin/chroot $VNFSDIR /tmp/torque-package-mom-linux-x86_64.sh --install
-echo "Installing Torque client utils from $PACKAGEDIR/torque"
-cp $PACKAGEDIR/torque/torque-package-client-linux-x86_64.sh $VNFSDIR/tmp/
-/usr/sbin/chroot $VNFSDIR /tmp/torque-package-client-linux-x86_64.sh --install
+echo "Installing Torque from $PACKAGEDIR/torque"
+yum --installroot $VNFSDIR --nogpgcheck -y install \
+	$PACKAGEDIR/torque/torque-*rpm
+/usr/sbin/chroot $VNFSDIR chkconfig pbs_server off
+/usr/sbin/chroot $VNFSDIR chkconfig pbs_sched off
+/usr/sbin/chroot $VNFSDIR chkconfig pbs_mom on
 
 
 echo "Installing OFED from $PACKAGEDIR/OFED"
