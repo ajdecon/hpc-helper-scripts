@@ -1,0 +1,17 @@
+Scripts and other files for generating provisioning images for R Systems.
+
+At the moment, aiming for building base images that can be customized for 
+customer-specific purposes.  Base images should probably include:
+
+- Base compute / Torque
+- Base compute / SGE
+- Base login+scheduler / Torque
+- Base login+scheduler / SGE
+- Base NFS server
+- Base Lustre MDS
+- Base Lustre OSS
+
+Also maybe...
+
+- Base HTTP server
+- Base single-node compute
