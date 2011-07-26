@@ -73,7 +73,7 @@ yum --installroot $VNFSDIR --nogpgcheck -y install dapl dapl-debuginfo \
 	libibverbs-devel-static libibverbs-utils libipathverbs \
 	libipathverbs-debuginfo libipathverbs-devel libmlx4 \
 	libmlx4-debuginfo libmthca libmthca-debuginfo \
-	libmthca-devel-static libnes libnes-debuginfo libnes-devel-static \
+	libnes libnes-debuginfo \
 	librdmacm librdmacm-debuginfo librdmacm-devel librdmacm-utils \
 	mpi-selector mpitests_mvapich2_gcc mpitests_mvapich_gcc \
 	mpitests_openmpi_gcc mstflint mstflint-debuginfo mvapich2_gcc \
