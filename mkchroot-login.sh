@@ -61,9 +61,9 @@ echo "Installing Torque from local repository"
 yum --installroot $VNFSDIR --nogpgcheck -y install \
 	torque torque-client torque-server torque-scheduler torque-debuginfo
 
-/usr/sbin/chroot $VNFSDIR chkconfig pbs_server off
-/usr/sbin/chroot $VNFSDIR chkconfig pbs_sched off
-/usr/sbin/chroot $VNFSDIR chkconfig pbs_mom on
+/usr/sbin/chroot $VNFSDIR chkconfig pbs_server on
+/usr/sbin/chroot $VNFSDIR chkconfig pbs_sched on
+/usr/sbin/chroot $VNFSDIR chkconfig pbs_mom off
 
 
 #echo "Installing OFED from $PACKAGEDIR/OFED"
