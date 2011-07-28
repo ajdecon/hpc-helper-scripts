@@ -51,7 +51,7 @@ yum --installroot $VNFSDIR -y install \
 # Install Torque: assumes you've set up a local repo with the RPMS.
 echo "Installing Torque from local repository"
 yum --installroot $VNFSDIR --nogpgcheck -y install \
-	torque torque-client torque-mom torque-debuginfo
+	torque torque-client torque-server torque-scheduler torque-debuginfo
 
 /usr/sbin/chroot $VNFSDIR chkconfig pbs_server off
 /usr/sbin/chroot $VNFSDIR chkconfig pbs_sched off
