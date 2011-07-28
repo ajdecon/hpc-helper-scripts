@@ -42,7 +42,15 @@ fi
 
 echo "Installing additional packages"
 yum --installroot $VNFSDIR -y install \
-    OpenIPMI ipmitool mdadm perl python cronie readline iptables
+    OpenIPMI ipmitool mdadm perl python cronie readline iptables \
+    tcsh zsh xorg-x11-server-Xorg xorg-x11-auth vim-enhanced nano emacs
+
+echo "Installing development tools"
+yum --installroot $VNFSDIR -y groupinstall "Development tools"
+
+echo "Installing plotting tools"
+yum --installroot $VNFSDIR -y groupinstall "Scientific support"
+
 
 #echo "Installing Torque from $PACKAGEDIR/torque"
 #yum --installroot $VNFSDIR --nogpgcheck -y install \
