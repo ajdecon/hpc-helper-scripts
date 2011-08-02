@@ -42,7 +42,8 @@ fi
 
 echo "Installing additional packages"
 yum --installroot $VNFSDIR -y install \
-    OpenIPMI ipmitool mdadm perl python cronie readline iptables man sysstat tcpdump
+    OpenIPMI ipmitool mdadm perl python cronie crontabs readline iptables man sysstat tcpdump \
+    man
 
 #echo "Installing Torque from $PACKAGEDIR/torque"
 #yum --installroot $VNFSDIR --nogpgcheck -y install \
