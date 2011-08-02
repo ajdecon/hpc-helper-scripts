@@ -1,5 +1,12 @@
 #!/bin/sh
 #
+# mkchroot-login.sh:
+#	Build base chroot for login-node imae.
+#
+# Based on Original mkchroot-rh.sh from Warewulf 3.0.
+# Modifications Copyright (c) 2011 R Systems NA, Inc.
+#
+# Warewulf:
 # Copyright (c) 2001-2003 Gregory M. Kurtzer
 #
 # Copyright (c) 2003-2011, The Regents of the University of California,
@@ -10,24 +17,47 @@
 
 
 VNFSDIR=$1
-#PACKAGEDIR=$2
+YUMDIR=$2
+VERSION=$3
 
 if [ -z "$VNFSDIR" ]; then
-    echo "USAGE: $0 /path/to/chroot /path/to/packages"
+    echo "$0: Build base chroot for login-node image."
+    echo "USAGE: $0 /path/to/chroot [/path/to/yum-dir version]"
+    echo "Where <yum-dir> contains the yum.conf and .repo files to be used for the install, "
+    echo "and <version> is the release version to use."
+    echo "Uses the host system's yum configuration and redhat-release version by default."
+    echo
     exit 1
 fi
 
-VERSION=`rpm -qf /etc/redhat-release  --qf '%{VERSION}\n'`
+if [ -z "$VERSION" ]; then
+	VERSION=`rpm -qf /etc/redhat-release  --qf '%{VERSION}\n'`
+fi
 
 mkdir -p $VNFSDIR
 mkdir -p $VNFSDIR/etc
 
-echo "Creating yum configuration based on master"
-cp -rap /etc/yum.conf /etc/yum.repos.d $VNFSDIR/etc
-sed -i -e "s/\$releasever/$VERSION/g" `find $VNFSDIR/etc/yum* -type f`
+#Set up the yum configuration
+if [ -z "$YUMDIR" ]; then
+	echo "Creating yum configuration based on master"
+	cp -rap /etc/yum.conf /etc/yum.repos.d $VNFSDIR/etc
+	sed -i -e "s/\$releasever/$VERSION/g" `find $VNFSDIR/etc/yum* -type f`
+else
+	echo "Copying yum configuration from $YUMDIR"
+	if [ -f $YUMDIR/yum.conf ]; then
+		cp -rap $YUMDIR/yum.conf $VNFSDIR/etc
+	else
+		echo "No yum.conf found in $YUMDIR, using master yum.conf"
+		cp -rap /etc/yum.conf $VNFSDIR/etc
+	fi
+	sed -i -e "s/\$releasever/$VERSION/g" `find $VNFSDIR/etc/yum* -type f`
+	echo "Copying .repo files from $YUMDIR"
+	mkdir -p $VNFSDIR/etc/yum.repos.d
+	cp -rap $YUMDIR/*.repo $VNFSDIR/etc/yum.repos.d
+fi
 
 echo "Installing minimal system"
-yum --installroot $VNFSDIR -y install \
+yum --installroot $VNFSDIR --nogpgcheck -y install \
     SysVinit basesystem bash redhat-release chkconfig coreutils e2fsprogs \
     ethtool filesystem findutils gawk grep initscripts iproute iputils \
     mingetty mktemp net-tools nfs-utils pam portmap procps psmisc rdate \
