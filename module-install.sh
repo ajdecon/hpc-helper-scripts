@@ -38,22 +38,24 @@ fi
 # Install packages from yum list
 if [ -f $MODULEDIR/$MODULE/yum.list ]; then
 	echo "Installing packages in yum.list"
-	yum --installroot $CHROOT -y `cat $MODULEDIR/$MODULE/yum.list`	
+	yum --installroot $CHROOT -y install `cat $MODULEDIR/$MODULE/yum.list`	
 	
 fi
 
 # If any packages are present in an rpms directory, install those
 if [ -d $MODULEDIR/$MODULE/rpms ]; then
 	if [ -f $MODULEDIR/$MODULE/rpm.list ]; then
-		echo "Installing packages from $MODULE/rpms in rpm.list"
-		yum --installroot $CHROOT --nogpgcheck -y $MODULEDIR/$MODULE/rpms/*.rpm
+		echo "Installing packages from $MODULE/rpms"
+		yum --installroot $CHROOT --nogpgcheck -y install $MODULEDIR/$MODULE/rpms/*.rpm
 	fi
 fi
 
 # If there is a $MODULE/install script, run it
 if [ -x $MODULEDIR/$MODULE/install ]; then
 	echo "Executing $MODULE/install..."
-	/sbin/chroot $MODULEDIR/$MODULE/install
+	mkdir -p $CHROOT/tmp
+	cp $MODULEDIR/$MODULE/install $CHROOT/tmp/install
+	/usr/sbin/chroot $CHROOT /tmp/install
 	echo "Done."
 fi
 
