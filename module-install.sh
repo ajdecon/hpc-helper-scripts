@@ -44,10 +44,8 @@ fi
 
 # If any packages are present in an rpms directory, install those
 if [ -d $MODULEDIR/$MODULE/rpms ]; then
-	if [ -f $MODULEDIR/$MODULE/rpm.list ]; then
-		echo "Installing packages from $MODULE/rpms"
-		yum --installroot $CHROOT --nogpgcheck -y install $MODULEDIR/$MODULE/rpms/*.rpm
-	fi
+	echo "Installing packages from $MODULE/rpms"
+	yum --installroot $CHROOT --nogpgcheck -y install $MODULEDIR/$MODULE/rpms/*.rpm
 fi
 
 # If there is a $MODULE/install script, run it
