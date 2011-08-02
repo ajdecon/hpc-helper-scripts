@@ -6,7 +6,7 @@ CHROOT=$1
 MODULE=$2
 MODULEDIR=$3
 
-if [ -z "$CHROOT" -o -z "$MODULE"]; then
+if [ -z $CHROOT ]; then
 	echo "USAGE: $0 /path/to/chroot module [moduledir]"
 	echo "  - moduledir: defaults to /etc/mkchroot/modules"
 	exit 1
