@@ -1,0 +1,4 @@
+RPM spec files for "dummy packages" which aggregate other packages for 
+larger groups of packages.  For example, an aggregate OFED rpm
+which Requires the various packages that make up the Open Fabrics distribution.
+
