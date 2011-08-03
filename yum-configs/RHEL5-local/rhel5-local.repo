@@ -1,0 +1,17 @@
+[rhel5-rsys]
+name = RHEL 5 Local Repository at R Systems - OS
+baseurl=http://foxrepo1/repo/RHEL/5/os/x86_64
+enabled=1
+gpgcheck=0
+
+#[rhel5-updates-rsys]
+#name = RHEL 5 Local Repository at R Systems - Updates
+#baseurl=http://foxrepo1/repo/RHEL/5/updates/x86_64
+#enabled=1
+#gpgcheck=0
+
+[rhel5-localbuild-rsys]
+name = RHEL 5 Local Repository at R Systems - Local-Build
+baseurl=http://foxrepo1/repo/RHEL/5/localbuild
+enabled=1
+gpgcheck=0
