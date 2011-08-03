@@ -56,7 +56,7 @@ else
 fi
 
 echo "Installing minimal system"
-yum --installroot $VNFSDIR --nogpgcheck -y install \
+yum --installroot $VNFSDIR -y install \
     SysVinit basesystem bash redhat-release chkconfig coreutils e2fsprogs \
     ethtool filesystem findutils gawk grep initscripts iproute iputils \
     mingetty mktemp net-tools nfs-utils pam portmap procps psmisc rdate \
@@ -70,7 +70,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Installing additional packages"
-yum --installroot $VNFSDIR --nogpgcheck -y install \
+yum --installroot $VNFSDIR -y install \
     OpenIPMI ipmitool mdadm perl python cronie crontabs readline iptables man sysstat tcpdump \
     man
 
