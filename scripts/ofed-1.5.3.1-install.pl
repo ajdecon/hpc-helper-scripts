@@ -1132,13 +1132,15 @@ my %packages_info = (
             ofa_req_inst => ["mpi-selector", "librdmacm", "libibumad", "libibumad-devel"],
             install32 => 0, exception => 0 },
 
+# Added SGE integration to OpenMPI options: $packages_info{'openmpi'}{'configure_options'} = --with-sge
+# 	-- Adam DeConinck at R Systems
         'openmpi' =>
             { name => "openmpi", parent => "openmpi",
             selected => 0, installed => 0, rpm_exist => 0, rpm_exist32 => 0,
             available => 0, mode => "user", dist_req_build => ["$libstdc_devel"],
             dist_req_inst => ["$libstdc"], ofa_req_build => ["libibverbs-devel", "librdmacm-devel"],
             ofa_req_inst => ["libibverbs", "mpi-selector", "librdmacm"],
-            install32 => 0, exception => 0, configure_options => '' },
+            install32 => 0, exception => 0, configure_options => '--with-sge' },
         'openmpi_gcc' =>
             { name => "openmpi_gcc", parent => "openmpi",
             selected => 0, installed => 0, rpm_exist => 0, rpm_exist32 => 0,
