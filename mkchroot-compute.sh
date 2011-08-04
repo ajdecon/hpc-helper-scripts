@@ -63,17 +63,13 @@ yum --installroot $VNFSDIR -y install \
     sed setup shadow-utils sysklogd tcp_wrappers termcap tzdata util-linux \
     words zlib tar less gzip which util-linux module-init-tools udev \
     openssh-clients openssh-server passwd dhclient pciutils vim-minimal \
-    shadow-utils strace
+    shadow-utils strace man OpenIPMI ipmitool mdadm perl python cronie \
+    crontabs readline iptables man sysstat tcpdump
+
 
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to create chroot"
 fi
-
-echo "Installing additional packages"
-yum --installroot $VNFSDIR -y install \
-    OpenIPMI ipmitool mdadm perl python cronie crontabs readline iptables man sysstat tcpdump \
-    man
-
 
 echo
 echo "Creating default fstab"
