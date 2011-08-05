@@ -64,7 +64,7 @@ yum --installroot $VNFSDIR -y install \
     words zlib tar less gzip which util-linux module-init-tools udev \
     openssh-clients openssh-server passwd dhclient pciutils vim-minimal \
     shadow-utils strace man OpenIPMI ipmitool mdadm perl python cronie \
-    crontabs readline iptables man sysstat tcpdump
+    crontabs readline iptables man sysstat tcpdump device-mapper
 
 
 if [ $? -ne 0 ]; then
