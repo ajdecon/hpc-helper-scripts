@@ -63,7 +63,7 @@ yum --installroot $VNFSDIR -y install \
     sed setup shadow-utils sysklogd tcp_wrappers termcap tzdata util-linux \
     words zlib tar less gzip which util-linux module-init-tools udev \
     openssh-clients openssh-server passwd dhclient pciutils vim-minimal \
-    shadow-utils strace man OpenIPMI ipmitool mdadm perl python cronie \
+    shadow-utils strace man OpenIPMI ipmitool perl python cronie \
     crontabs readline iptables man sysstat tcpdump device-mapper
 
 
