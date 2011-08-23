@@ -1,5 +1,5 @@
 Name:		rs-login-packages	
-Version:	2011080401
+Version:	2011082301
 Release:	1%{?dist}
 Summary:	Dummy package to install packages for HPC login nodes.
 
