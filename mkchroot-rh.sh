@@ -64,7 +64,7 @@ yum --installroot $VNFSDIR -y install \
     words zlib tar less gzip which util-linux module-init-tools udev \
     openssh-clients openssh-server passwd dhclient pciutils vim-minimal \
     shadow-utils strace man OpenIPMI ipmitool perl python cronie \
-    crontabs readline iptables man sysstat tcpdump device-mapper
+    crontabs readline iptables man sysstat tcpdump device-mapper kernel
 
 
 if [ $? -ne 0 ]; then
@@ -79,6 +79,11 @@ echo "devpts /dev/pts devpts gid=5,mode=620 0 0" >> $VNFSDIR/etc/fstab
 echo "sysfs /sys sysfs defaults 0 0" >> $VNFSDIR/etc/fstab
 echo "proc /proc proc defaults 0 0" >> $VNFSDIR/etc/fstab
 
+echo 
+echo "Creating default /etc/sysconfig/network"
+echo "NETWORKING=yes" > $VNFSDIR/etc/sysconfig/network
+
+echo
 echo "Creating SSH host keys"
 /usr/bin/ssh-keygen -q -t rsa1 -f $VNFSDIR/etc/ssh/ssh_host_key -C '' -N ''
 /usr/bin/ssh-keygen -q -t rsa -f $VNFSDIR/etc/ssh/ssh_host_rsa_key -C '' -N ''
@@ -89,6 +94,34 @@ if [ ! -f "$VNFSDIR/etc/shadow" ]; then
     /usr/sbin/chroot $VNFSDIR /usr/sbin/pwconv
 fi
 
+# bashrc and bash_profile for root
+echo 
+echo "Setting up root's bash environment"
+echo "if [ -f /etc/bashrc ]; then" > $VNFSDIR/root/.bashrc
+echo "        . /etc/bashrc" >> $VNFSDIR/root/.bashrc
+echo "fi" >> $VNFSDIR/root/.bashrc
+
+echo "if [ -f $HOME/.bashrc ]; then" > $VNFSDIR/root/.bash_profile
+echo "    . $HOME/.bashrc" >> $VNFSDIR/root/.bash_profile
+echo "fi" >> $VNFSDIR/root/.bash_profile
+
+# root keys for VNFS.
+mkdir $VNFSDIR/root/.ssh
+chmod 700 $VNFSDIR/root/.ssh
+touch $VNFSDIR/root/.ssh/authorized_keys
+chmod 600 $VNFSDIR/root/.ssh/authorized_keys
+
+echo
+if [ -f "/root/.ssh/id_rsa.pub" ]; then
+    echo "Adding root's id_rsa.pub to VNFS authorized_keys"
+    cat /root/.ssh/id_rsa.pub >> $VNFSDIR/root/.ssh/authorized_keys
+fi
+if [ -f "/root/.ssh/id_dsa.pub" ]; then
+    echo "Adding root's id_dsa.pub to VNFS authorized_keys"
+    cat /root/.ssh/id_dsa.pub >> $VNFSDIR/root/.ssh/authorized_keys
+fi
+
+echo
 if [ -x "$VNFSDIR/usr/bin/passwd" ]; then
     echo "Setting root password..."
     /usr/sbin/chroot $VNFSDIR /usr/bin/passwd root
