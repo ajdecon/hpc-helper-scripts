@@ -1,0 +1,21 @@
+[sl-security]
+name=Scientific Linux 6.1 - x86_64 - security updates
+baseurl=http://ftp.scientificlinux.org/linux/scientific/6.1/x86_64/updates/security/
+                http://ftp1.scientificlinux.org/linux/scientific/6.1/x86_64/updates/security/
+                http://ftp2.scientificlinux.org/linux/scientific/6.1/x86_64/updates/security/
+                ftp://ftp.scientificlinux.org/linux/scientific/6.1/x86_64/updates/security/
+#mirrorlist=http://ftp.scientificlinux.org/linux/scientific/mirrorlist/sl-security-6.txt
+enabled=1
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dawson
+
+[sl-fastbugs]
+name=Scientific Linux 6.1 - x86_64 - fastbug updates
+baseurl=http://ftp.scientificlinux.org/linux/scientific/6.1/x86_64/updates/fastbugs/
+                http://ftp1.scientificlinux.org/linux/scientific/6.1/x86_64/updates/fastbugs/
+                http://ftp2.scientificlinux.org/linux/scientific/6.1/x86_64/updates/fastbugs/
+                ftp://ftp.scientificlinux.org/linux/scientific/6.1/x86_64/updates/fastbugs/
+#mirrorlist=http://ftp.scientificlinux.org/linux/scientific/mirrorlist/sl-fastbugs-6.txt
+enabled=0
+gpgcheck=0
+
