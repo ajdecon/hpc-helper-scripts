@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Hpc-helper-scripts by ajdecon</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Hpc-helper-scripts</h1>
+        <p class="header">A collection of scripts and notes I use to help manage HPC clusters (public version).</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/ajdecon/hpc-helper-scripts/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/ajdecon/hpc-helper-scripts/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/ajdecon/hpc-helper-scripts">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/ajdecon">ajdecon</a></p>
+
+
+      </header>
+      <section>
+        <h1>HPC Helper Scripts</h1>
+
+<p>This is just an assortment of scripts, notes, and miscellaneous tools I've
+put together for helping with managing HPC clusters. Some of these are trivial,
+others are decent tools in their own right; the latter are often included here as 
+submodules rather than tracked as a massive repo.</p>
+
+<p>A few worth noting include:</p>
+
+<ul>
+<li><p><strong>mkchroot</strong>: A version of Warewulf's mkchroot-rh.sh which can take a yum 
+configuration as one argument, so that you can (for example) build a Scientific
+Linux chroot on a Red Hat system. This is important mostly if you want to
+have a system that independently updates itself from other repos. Warewulf's new 
+wwmkchroot is probably more useful in general, but still doesn't let you 
+specify arbitary yum configs.</p></li>
+<li><p><strong>torque_qhistory</strong>: A tool for viewing and doing simple queries on PBS/Torque 
+accounting files.</p></li>
+<li><p><strong>modules_logger</strong>: A system for logging the usage of environment-modules to 
+help system administrators better manage cluster software. Uses MongoDB as the persistence layer.</p></li>
+</ul>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		          <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-12576607-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
