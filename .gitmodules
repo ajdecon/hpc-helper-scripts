@@ -1,0 +1,6 @@
+[submodule "torque_qhistory"]
+	path = torque_qhistory
+	url = https://github.com/ajdecon/torque_qhistory.git
+[submodule "modules_logger"]
+	path = modules_logger
+	url = https://github.com/ajdecon/modules_logger.git
