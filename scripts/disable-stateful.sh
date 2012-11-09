@@ -17,11 +17,11 @@ fi
 
 wwsh << EOF
 quiet
-object $NODE -d filesystems
-object $NODE -d diskformat
-object $NODE -d diskparition
-object $NODE -d bootloader
-object $NODE -d bootlocal
+object modify $NODE -d filesystems
+object modify $NODE -d diskformat
+object modify $NODE -d diskparition
+object modify $NODE -d bootloader
+object modify $NODE -d bootlocal
 EOF
 
 

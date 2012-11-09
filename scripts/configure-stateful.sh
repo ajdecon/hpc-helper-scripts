@@ -31,10 +31,10 @@ fi
 
 wwsh << EOF
 quiet
-object $NODE -s filesystems="mountpoint=/:type=ext2:dev=sda1:size=$ROOTSIZE,dev=sda2:type=swap:size=$SWAPSIZE"
-object $NODE -s diskformat=sda1,sda2
-object $NODE -s diskpartition=sda
-object $NODE -s bootloader=sda
+object modify $NODE -s filesystems="mountpoint=/:type=ext2:dev=sda1:size=$ROOTSIZE,dev=sda2:type=swap:size=$SWAPSIZE"
+object modify $NODE -s diskformat=sda1,sda2
+object modify $NODE -s diskpartition=sda
+object modify $NODE -s bootloader=sda
 EOF
 
 
