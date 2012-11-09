@@ -1,0 +1,94 @@
+#!/usr/bin/perl
+
+use JSON;
+use Data::Dumper;
+use Warewulf::DataStore;
+use Warewulf::Node;
+use Warewulf::Util;
+use Warewulf::DSO::Node;
+use Warewulf::Network;
+use Warewulf::Provision;
+use Warewulf::Bootstrap;
+use Warewulf::Vnfs;
+use Warewulf::File;
+use Warewulf::Ipmi;
+
+my $nodename = $ARGV[0];
+my $db = Warewulf::DataStore->new();
+
+my $nodes = $db->get_objects("node","name",&expand_bracket($nodename)) or die "Node $nodename doesn't seem to exist!\n";
+
+my %output;
+
+foreach my $n ($nodes->get_list()) {
+    my $name = $n->name();
+    $output{$name}{'name'} = $name;
+    $output{$name}{'nodename'} = $n->nodename() || "undef";
+    $output{$name}{'id'} = $n->id();
+    $output{$name}{'cluster'} = $n->cluster() || "undef";
+    $output{$name}{'domain'} = $n->domain() || "undef";
+    $output{$name}{'groups'} = $n->groups() || "undef";
+
+    foreach my $nd (sort($n->netdevs_list())) {
+        $output{$name}{$nd}{'hwaddr'} = $n->hwaddr($nd) || "undef";
+        $output{$name}{$nd}{'ipaddr'} = $n->ipaddr($nd) || "undef";
+        $output{$name}{$nd}{'netmask'} = $n->netmask($nd) || "undef";
+        $output{$name}{$nd}{'network'} = $n->network($nd) || "undef";
+        $output{$name}{$nd}{'gateway'} = $n->gateway($nd) || "undef";
+        $output{$name}{$nd}{'fqdn'} = $n->fqdn($nd) || "undef";
+    }
+
+    # Provision properties
+    my @files;
+    my $vnfs = "undef";
+    my $bootstrap = "undef";
+    my $fileObjSet;
+    
+    if ($n->fileids()) {
+        $fileObjSet = $db->get_objects("file","_id",$n->fileids()) 
+    }
+    if ($fileObjSet) {
+        foreach my $f ($fileObjSet->get_list()) {
+            push (@files, $f->name());
+        }
+    } 
+    $output{$name}{'files'}= @files || "undef";
+
+    if (my $vnfsid = $n->vnfsid()) {
+        my $vnfsObj = $db->get_objects("vnfs", "_id", $vnfsid)->get_object(0);
+        if ($vnfsObj) {
+            $vnfs = $vnfsObj->name();
+        }
+    }
+    $output{$name}{'vnfs'} = $vnfs;
+
+    if (my $bootstrapid = $n->bootstrapid()) {
+        my $bootstrapObj = $db->get_objects("bootstrap","_id",$bootstrapid)->get_object(0);
+        if ($bootstrapObj) {
+            $bootstrap = $bootstrapObj->name();
+        }
+    }
+    $output{$name}{'bootstrap'} = $bootstrap;
+
+    $output{$name}{'kargs'} = $n->kargs() || "quiet";
+    $output{$name}{'preshell'} = $n->preshell() ? "true" : "false";
+    $output{$name}{'postshell'} = $n->postshell() ? "true" : "false";
+    $output{$name}{'filesystems'} = $n->get('filesystems');
+    $output{$name}{'diskformat'} = $n->get('diskformat');
+    $output{$name}{'diskpartition'} = $n->get('diskpartition');
+    $output{$name}{'bootlocal'} = $n->bootlocal();
+    $output{$name}{'bootloader'} = $n->get('bootloader');
+
+    # IPMI
+    $output{$name}{'ipmi'}{'ipaddr'} = $n->ipmi_ipaddr() || "undef";
+    $output{$name}{'ipmi'}{'netmask'} = $n->ipmi_netmask() || "undef";
+    $output{$name}{'ipmi'}{'username'} = $n->ipmi_username() || "undef";
+    $output{$name}{'ipmi'}{'password'} = $n->ipmi_password() || "undef";
+    $output{$name}{'ipmi'}{'autoconfig'} = $n->ipmi_autoconfig() ;
+
+}
+
+my $json = JSON::encode_json(\%output);
+
+print $json;
+
