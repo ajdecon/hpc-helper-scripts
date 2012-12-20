@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+
+use Data::Dumper;
+use Warewulf::DataStore;
+use Warewulf::Node;
+use Warewulf::Vnfs;
+use Warewulf::File;
+use Warewulf::Bootstrap;
+use Warewulf::Object;
+use Warewulf::DSO::Node;
+
+my $type = $ARGV[0];
+my $nodename = $ARGV[1];
+my $db = Warewulf::DataStore->new() or die "Can't connect to datastore";
+my $node = $db->get_objects($type,"name",$nodename)->get_object(0) or die "Can't get $type $nodename";
+my %hashref = $node->get_hash();
+
+print Dumper(\%hashref);
+
+
+
