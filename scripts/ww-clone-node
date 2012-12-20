@@ -10,9 +10,6 @@ use Warewulf::DataStore;
 use Warewulf::DSO::Node;
 use Warewulf::Node;
 use Warewulf::Provision;
-use Warewulf::Bootstrap;
-use Warewulf::Vnfs;
-use Warewulf::File;
 
 my %options = ();
 getopts("y",\%options);
