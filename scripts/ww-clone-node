@@ -61,7 +61,8 @@ $new_node->set("bootloader",$orig_node->get("bootloader")) or warn "No value for
 $db->persist($new_node);
 
 print "\n\n...Done.\n\n";
-`wwsh provision print $new_name`;
+print `wwsh node print $new_name`;
+print `wwsh provision print $new_name`;
 
 print "\nDon't forget to set the HWADDR, IP address, and netmask for $new_name.\n";
 
