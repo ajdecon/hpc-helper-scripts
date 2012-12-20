@@ -1,0 +1,68 @@
+#!/usr/bin/perl
+#
+# ww-clone-node
+#
+# Clone basic properties from one Warewulf::Node to another.
+# 
+
+use Getopt::Std;
+use Warewulf::DataStore;
+use Warewulf::DSO::Node;
+use Warewulf::Node;
+use Warewulf::Provision;
+use Warewulf::Bootstrap;
+use Warewulf::Vnfs;
+use Warewulf::File;
+
+my %options = ();
+getopts("y",\%options);
+
+my $usage = "ww-clone-node: Clone basic node properties from one Warewulf Node to another.\n" . 
+            "Usage: ww-clone-node [-y] original-node new-node\n" . 
+            "    -y:  Overwrite new-node settings if new-node exists\n";
+
+my $orig_name = $ARGV[0] or die $usage;
+my $new_name = $ARGV[1] or die $usage;
+
+my $db = Warewulf::DataStore->new() 
+    or die "Could not connect to Warewulf datastore\n";
+
+my $orig_node = $db->get_objects("node","name",$orig_name)->get_object(0)
+    or die "Original node $orig_name does not exist in the Warewulf DataStore";
+
+if ($new_node = $db->get_objects("node","name",$new_name)->get_object(0)) {
+    if (not defined $options{y}) {
+        print "$new_name exists and will not be over-written.\n";
+        print "To over-write $new_name, include -y.\n";
+        exit(1);
+    }
+} else {
+    $new_node = Warewulf::Node->new();
+}
+
+print "Copying values for bootstrap, vnfs, fileids, kargs, cluster, domain, groups, \n";
+print "filesystems, diskformat, diskpartition, and bootloader.\n";
+
+$new_node->name($new_name);
+$new_node->bootstrapid($orig_node->bootstrapid());
+$new_node->vnfsid($orig_node->vnfsid());
+$new_node->kargs($orig_node->kargs());
+$new_node->fileids($orig_node->fileids());
+$new_node->cluster($orig_node->cluster());
+$new_node->domain($orig_node->domain());
+$new_node->groups($orig_node->groups());
+
+# Filesystems
+$new_node->set("filesystems",$orig_node->get("filesystems")) or warn "No value for filesystems\n";
+$new_node->set("diskformat",$orig_node->get("diskformat")) or warn "No value for diskformat\n";
+$new_node->set("diskpartition",$orig_node->get("diskpartition")) or warn "No value for diskparititon\n";
+$new_node->set("bootloader",$orig_node->get("bootloader")) or warn "No value for bootloader\n";
+
+$db->persist($new_node);
+
+print "\n\n...Done.\n\n";
+`wwsh provision print $new_name`;
+
+print "\nDon't forget to set the HWADDR, IP address, and netmask for $new_name.\n";
+
+exit(0);
