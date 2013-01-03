@@ -21,6 +21,8 @@ my $usage = "ww-clone-node: Clone basic node properties from one Warewulf Node t
 my $orig_name = $ARGV[0] or die $usage;
 my $new_name = $ARGV[1] or die $usage;
 
+my $pxe_update_command = "wwsh pxe update $new_name";
+
 my $db = Warewulf::DataStore->new() 
     or die "Could not connect to Warewulf datastore\n";
 
@@ -56,6 +58,9 @@ $new_node->set("diskpartition",$orig_node->get("diskpartition")) or warn "No val
 $new_node->set("bootloader",$orig_node->get("bootloader")) or warn "No value for bootloader\n";
 
 $db->persist($new_node);
+
+print "Running PXE update: $pxe_update_command\n";
+print `$pxe_update_command`;
 
 print "\n\n...Done.\n\n";
 print `wwsh node print $new_name`;
