@@ -1,0 +1,80 @@
+#!/usr/bin/env python
+
+import sys
+import argparse
+import subprocess
+import re
+
+# module_package
+#   Generate an RPM based on the contents of an environment module.
+#   Assumes that...
+#   - The module is for a software package contained in a single directory
+#   - The module defines some variable (default "root") which names that 
+#     directory.
+
+
+def main():
+    args = get_arguments()
+    module_file = get_module_file(args.module)
+    module_root = get_module_root(module_file, args.rootvar)
+
+    path_parts = module_root.split("/")
+    package_name = path_parts[-2]
+    package_version = path_parts[-1]
+
+    print "Building %s version %s \nRoot directory: %s" % (package_name, 
+            package_version, module_root)
+    rc = fpm_build(module_root, package_name, package_version, 
+            args.package_type, args.prefix, module_file)
+    if rc == 0:
+        print "Succeeded."
+    else:
+        print "Failed."
+
+
+def get_arguments():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("module")
+    ap.add_argument("--rootvar", "-r", dest="rootvar", action="store", 
+            required=False, 
+            help="Name of module variable which defines software root (default: root)",
+            default="root")
+    ap.add_argument("--type", "-t", dest="package_type", action="store",
+            help="Type of package to build (default: rpm)",
+            default="rpm")
+    ap.add_argument("--prefix", "-p", dest="prefix", action="store",
+            help="Path to prefix the package files with (default: /)",
+            default="/")
+    return ap.parse_args()
+
+def get_module_file(module):
+    module_show = subprocess.check_output(
+            "/usr/bin/modulecmd bash show %s" % (module),
+            stderr=subprocess.STDOUT,
+            shell=True)
+    return module_show.split("\n")[1][:-1]
+
+def get_module_root(module_file, rootvar):
+    mfile = open(module_file, "r")
+    lines = mfile.readlines()
+    mfile.close()
+    for line in lines:
+        m = re.match(r"\s*set\s+%s\s+(.+)" % rootvar,line)
+        if m:
+            return m.group(1)
+    return None
+
+def fpm_build(root_dir, package_name, package_version, package_type, 
+        prefix, module_file):
+    module_dir = '/'.join(module_file.split('/')[:-1])
+    fpm_line = "/usr/local/bin/fpm --prefix %s -s dir -t %s -n %s -v %s %s %s" % (prefix,
+            package_type, package_name, package_version, root_dir, module_dir)
+    print "Running '%s'" % (fpm_line)
+    try:
+        subprocess.check_call(fpm_line, shell=True)
+        return 0
+    except CalledProcessError as e:
+        return e.returncode
+
+if __name__ == "__main__":
+    main()
