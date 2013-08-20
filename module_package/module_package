@@ -67,7 +67,8 @@ def get_module_root(module_file, rootvar):
 def fpm_build(root_dir, package_name, package_version, package_type, 
         prefix, module_file):
     module_dir = '/'.join(module_file.split('/')[:-1])
-    fpm_line = "/usr/local/bin/fpm --prefix %s -s dir -t %s -n %s -v %s %s %s" % (prefix,
+    fpm_bin = subprocess.check_output("which fpm", shell=True).strip()
+    fpm_line = "%s --prefix %s -s dir -t %s -n %s -v %s %s %s" % (fpm_bin, prefix,
             package_type, package_name, package_version, root_dir, module_dir)
     print "Running '%s'" % (fpm_line)
     try:
