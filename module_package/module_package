@@ -19,7 +19,7 @@ def main():
     module_root = get_module_root(module_file, args.rootvar)
 
     path_parts = module_root.split("/")
-    package_name = path_parts[-2]
+    package_name = "%s%s" % (args.package_prefix, path_parts[-2])
     package_version = path_parts[-1]
 
     print "Building %s version %s \nRoot directory: %s" % (package_name, 
@@ -45,6 +45,9 @@ def get_arguments():
     ap.add_argument("--prefix", "-p", dest="prefix", action="store",
             help="Path to prefix the package files with (default: /)",
             default="/")
+    ap.add_argument("--package-prefix", dest="package_prefix", action="store",
+            help="Name to prefix the package name with (default: none)",
+            default="")
     return ap.parse_args()
 
 def get_module_file(module):
